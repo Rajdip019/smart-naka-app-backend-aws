@@ -9,7 +9,7 @@ AWS.config.region = "ap-south-1";
 // Handle promise's fulfilled/rejected states
 export const handler = async (event) => {
   //Changing the name to a topic name
-
+console.log(event.Records[0].messageAttributes);
   const topicName = event.Records[0].messageAttributes.topicName.stringValue
     .replace(/\s+/g, "-")
     .toLowerCase();

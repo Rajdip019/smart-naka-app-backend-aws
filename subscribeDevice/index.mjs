@@ -36,10 +36,11 @@ export const handler = async (event) => {
   const result = await createSNSEndpoint(event.deviceToken);
   const endpointArn = result.EndpointArn;
   await subscribeDeviceToTopic(endpointArn);
+  console.log(event.topicName);
 
   const paramsforSQS = {
     // Remove DelaySeconds parameter and value for FIFO queues
-    DelaySeconds: 1,
+    DelaySeconds: 0,
     MessageAttributes: {
       deviceEndPoint: {
         DataType: "String",

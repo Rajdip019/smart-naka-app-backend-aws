@@ -8,7 +8,7 @@ AWS.config.region = "ap-south-1";
 const sns = new AWS.SNS();
 
 export const handler = async (event) => {
-  const topicName = event.policeStation.replace(/\s+/g, "-").toLowerCase();
+  const topicName = event.topicName.replace(/\s+/g, "-").toLowerCase();
 
   const createTopicPromise = new AWS.SNS({ apiVersion: "2010-03-31" })
     .createTopic({ Name: topicName })
@@ -25,9 +25,8 @@ export const handler = async (event) => {
           data: {
             click_action: "FLUTTER_NOTIFICATION_CLICK",
             status: "done",
-            body: event.description,
+            body: event.carNumber,
             title: event.title
-            // carNumber: event.carNumber,
           },
         }),
       }),

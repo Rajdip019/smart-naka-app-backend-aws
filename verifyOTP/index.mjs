@@ -24,7 +24,7 @@ const getLastPassword = async (number, otp) => {
   ) {
     return {"error" : "OTP expired."};
   }else{
-    if(otp === result.Item.otp){
+    if(otp === result.Item.OTP){
       return {"success" : true};
     }else{
       return {"success" : false};

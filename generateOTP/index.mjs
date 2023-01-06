@@ -59,7 +59,7 @@ export const handler = async (event) => {
         },
       })
       .promise();
-    return { statusCode: 200, otp: otp, timeStamp: Date.now() };
+    return { statusCode: 200, timeStamp: Date.now() };
   } catch (e) {
     console.log("error :", e);
     return { error: "Something went wrong" };
