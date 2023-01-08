@@ -1,4 +1,4 @@
-# smart-naka-app-backend-aws
+# Smart Naka APP
 
 # Basic
 
