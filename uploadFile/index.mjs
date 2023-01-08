@@ -36,13 +36,6 @@ export const handler = async (event) => {
     }
   }).promise();
 
-  // getting the url of the database
-  try{
-    const url = s3.getSignedUrl('getObject',getParams);
-    return {"url" : url};
-  }catch(e){
-    console.log("error: ", e);
-    return {"error" : "Something went wrong."}
-  }
+  return "https://smart-naka.s3.ap-south-1.amazonaws.com/"+key;
   
 };

@@ -6,21 +6,33 @@ AWS.config.update({
 });
 AWS.config.region = "ap-south-1";
 
-const tableName = process.env.TABLE_NAME;
+const carTable = process.env.CAR_TABLE_NAME;
+const policeStationTable = process.env.POLICE_STATION_TABLE_NAME;
 
 // Create the DynamoDB service object
 var dynamodb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
 export const handler = async (event) => {
+
+  const policeStation = event.policeStation
+  .replace(/\s+/g, "-")
+  .toLowerCase();
+
   const lastedTrackingData = AWS.DynamoDB.Converter.marshall({
     "location": event.location,
     "timeStamp": Date.now(),
   });
+
+  const lastedTrackingDataPoliceStation = AWS.DynamoDB.Converter.marshall({
+    "location": event.location,
+    "timeStamp": Date.now(),
+    "number" : event.number
+  });
   console.log(lastedTrackingData);
   try{
-      const data = await dynamodb.updateItem({
-          TableName: tableName,
-          Key: {number: { S: event.number }},
+      await dynamodb.updateItem({
+          TableName: carTable,
+          Key: {"number": { S: event.number }},
           UpdateExpression: "SET #trackDetails = list_append(:newTrackedDetails, #trackDetails)",
           "ExpressionAttributeNames" : {
             "#trackDetails" : "trackDetails"
@@ -30,8 +42,25 @@ export const handler = async (event) => {
           },
         })
         .promise();
-        return data
   }catch(e){
     console.log(e);
   }
+
+  try{
+    const data = await dynamodb.updateItem({
+        TableName: policeStationTable,
+        Key: {"stationId": { S: policeStation }},
+        UpdateExpression: "SET #trackDetails = list_append(:newTrackedDetails, #trackDetails)",
+        "ExpressionAttributeNames" : {
+          "#trackDetails" : "trackDetails"
+        },
+        ExpressionAttributeValues: {
+          ":newTrackedDetails": { L : [{M :lastedTrackingDataPoliceStation}]}
+        },
+      })
+      .promise();
+      return data
+}catch(e){
+  console.log(e);
+}
 };

@@ -35,6 +35,24 @@ export const handler = async (event) => {
     console.log(e);
   }
 
+  try {
+    await sns
+      .publish({
+        Message: JSON.stringify({
+          default: "Sample fallback message",
+          http: JSON.stringify({
+            car_number: event.number,
+            action: "REMOVE",
+          }),
+        }),
+        Subject: "A new notification form Lamda",
+        TopicArn: "arn:aws:sns:ap-south-1:814090889453:smart-naka-local-db",
+      })
+      .promise();
+  } catch (e) {
+    console.log("error", e);
+  }
+
   const paramsforSQS = {
     // Remove DelaySeconds parameter and value for FIFO queues
     DelaySeconds: 1,
