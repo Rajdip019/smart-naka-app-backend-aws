@@ -21,7 +21,7 @@ export const handler = async (event) => {
           }),
         }),
         Subject: "A new notification form Lamda",
-        TopicArn: "arn:aws:sns:ap-south-1:814090889453:naka-local-car-data",
+        TopicArn: "arn:aws:sns:ap-south-1:814090889453:smart-naka-local-db",
       })
       .promise();
   } catch (e) {

@@ -1,4 +1,7 @@
 import AWS from "aws-sdk";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import twilio from "twilio";
 
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY,
@@ -27,41 +30,25 @@ const logPassword = async (password, phone, TTL) => {
   await dynamodb.put(putPrams).promise();
 };
 
-const isNumberOptedOut = async (number) => {
-  const response = await sns
-    .checkIfPhoneNumberIsOptedOut({
-      phoneNumber: number,
-    })
-    .promise();
-  return response.isOptedOut;
-};
-
 export const handler = async (event) => {
   if (!event.number) throw Error("No number provided");
-  if (await isNumberOptedOut(event.number)) throw Error("Number opted out");
   const otp = generatePassword();
   const TTL = event.TTL;
-  try {
     await logPassword(otp, event.number, TTL);
-    await sns
-      .publish({
-        Message: `Here is your OTP of Smart Naka App - ${otp}. This OTP will be expired within 60 seconds and don't share this with anyone.`,
-        PhoneNumber: event.number,
-        MessageAttributes: {
-          "AWS.SNS.SMS.SenderID": {
-            DataType: "String",
-            StringValue: "Naka-App",
-          },
-          "AWS.SNS.SMS.SMSType": {
-            DataType: "String",
-            StringValue: "Transactional",
-          },
-        },
-      })
-      .promise();
-    return { statusCode: 200, timeStamp: Date.now() };
-  } catch (e) {
-    console.log("error :", e);
-    return { error: "Something went wrong" };
-  }
+    const accountSid = process.env.TWILIO_ACCOUNT_SID; 
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+    try{
+      const client = new twilio(accountSid, authToken);
+      await client.messages
+        .create({
+           body: `Here is your OTP of Smart Naka App - ${otp}. This OTP will be expired within 60 seconds and don't share this with anyone.`,
+           from: '+17207384969',
+           to: event.number
+         })
+        .then(message => console.log(message.sid)); 
+      return { statusCode: 200, timeStamp: Date.now() };
+    }catch(e){
+      console.log("error",e);
+    }
 };

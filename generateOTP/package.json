@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1286.0",
-    "aws-xray-sdk": "^3.4.0"
+    "aws-xray-sdk": "^3.4.0",
+    "twilio": "^3.84.0"
   }
 }
