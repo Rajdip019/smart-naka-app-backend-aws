@@ -7,7 +7,7 @@ Body
 ```json
 {
   "topicName": The Police station name,
-	"deviceToken" : //
+  "deviceToken" : //
 }
 ```
 
@@ -20,5 +20,5 @@ Return :
       "deviceEndPoint": "endpointArn",
       "topicName": "event.topicName",
     }
-  };
+  }
 ```
