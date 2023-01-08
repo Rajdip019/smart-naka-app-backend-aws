@@ -8,6 +8,16 @@ The main `URL`for the API is :
 https://1aksik8wwi.execute-api.ap-south-1.amazonaws.com/dev
 ```
 
+# See all API routes and it's docs:
+
+[OTP send and verify](https://github.com/Rajdip019/smart-naka-app-backend-aws/blob/main/OTP%20Send%20and%20Verification.md)
+
+[Police and Police Station Data](https://github.com/Rajdip019/smart-naka-app-backend-aws/blob/main/Police%20and%20police%20station.md)
+
+[Missing Cars Data](https://github.com/Rajdip019/smart-naka-app-backend-aws/blob/main/Missing%20Cars%20Data.md)
+
+[Subscribe Device](https://github.com/Rajdip019/smart-naka-app-backend-aws/blob/main/Subscribe%20Device.md)
+
 ## Authentication:
 
 In the HTTP header you need to pass this 👇
